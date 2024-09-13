@@ -8,16 +8,19 @@ import { Task } from './task.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { User } from 'src/auth/user.entity';
 import { GetUser } from 'src/auth/get-user.decorator';
+import { Logger } from '@nestjs/common';
 
 @Controller('tasks')// This decorator defines the controller's base route
 @UseGuards(AuthGuard()) // This decorator applies the 'AuthGuard' guard to the controller
 export class TasksController {
+    private logger = new Logger('TasksController');// This creates a new instance of the 'Logger' class with the context 'TasksController'
     constructor(private tasksService: TasksService) { }
 
     @Get()
     getTasks(@Query() filterDto: GetTasksFillterDto,
         @GetUser() user: User
     ): Promise<Task[]> {
+        this.logger.verbose(`User "${user.username}" retrieving all tasks. Filters: ${JSON.stringify(filterDto)}`);
         return this.tasksService.getTasks(filterDto, user);
     }
 
@@ -39,6 +42,7 @@ export class TasksController {
     createTask(@Body() CreateTaskDto: CreateTaskDto,
         @GetUser() user: User
     ): Promise<Task> {
+        this.logger.verbose(`User "${user.username}" creating a new task. Data: ${JSON.stringify(CreateTaskDto)}`);
         return this.tasksService.createTask(CreateTaskDto, user); // Call the 'createTask' method from the 'TasksService' class
     }
 
