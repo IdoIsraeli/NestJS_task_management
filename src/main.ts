@@ -7,6 +7,7 @@ import { Logger } from '@nestjs/common';
 async function bootstrap() {
   const logger = new Logger();
   const app = await NestFactory.create(AppModule); // Create a new Nest application
+  app.enableCors();//enable the app to recieve requests from other domains 
   app.useGlobalPipes(new ValidationPipe());//whenever there is a valitadion decorator, it will use validation pipes.
   app.useGlobalInterceptors(new TransformInterceptor());//whenever there is a response, it will use the transform interceptor.
   const port = 3000;
