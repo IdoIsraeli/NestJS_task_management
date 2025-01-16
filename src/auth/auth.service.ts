@@ -29,7 +29,7 @@ export class AuthService {
         try {
             await this.usersRepository.save(user);
         } catch (error) {
-            if (error.code === '23505') // duplicate username
+            if (error.code === '23505') // 23505 is duplicate username error code
                 throw new ConflictException('username already exists');
             else
                 throw new InternalServerErrorException();
